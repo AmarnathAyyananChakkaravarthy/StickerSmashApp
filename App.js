@@ -12,6 +12,7 @@ import EmojiSticker from './components/EmojiSticker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { captureRef } from 'react-native-view-shot';
 import * as MediaLibrary from 'expo-media-library'
+import domtoimage from 'dom-to-image';
 
 const PlaceholderImage = require('./assets/images/background-image.png');
 
@@ -59,6 +60,21 @@ export default function App() {
         }
       }catch(e){
         console.log(e)
+      }
+    }else{
+      console.log("Inside Web Save Method...");
+      try{
+        const imageUri = await domtoimage.toJpeg(imageRef.current, {
+          quality:0.95,
+          width: 320,
+          height: 440,
+        });
+        const downLoadLink = document.createElement('a');
+        downLoadLink.download = "image1";
+        downLoadLink.href = imageUri;
+        downLoadLink.click();
+      }catch(e){
+        console.log(e);
       }
     }
   };
@@ -110,7 +126,7 @@ export default function App() {
         <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
           <EmojiList onSelect={onSelectEmoji} onCloseModal={onModalClose}/>
         </EmojiPicker>
-        <StatusBar style="auto" />
+        <StatusBar style="light" />
       </View>
     </GestureHandlerRootView>
   );
